@@ -4,7 +4,7 @@ import { FaLink, FaSpinner, FaYoutube } from "react-icons/fa";
 
 const URLForm = ({ onResult, onError }) => {
   const [url, setUrl] = useState("");
-  const [type, setType] = useState("video"); // 'video' or 'playlist'
+  const [type, setType] = useState("playlist"); // 'video' or 'playlist'
   const [loading, setLoading] = useState(false);
   const [formError, setFormError] = useState("");
 
@@ -82,7 +82,19 @@ const URLForm = ({ onResult, onError }) => {
 
       <form onSubmit={handleSubmit}>
         <div className="mb-4">
+          {" "}
           <div className="flex space-x-4 mb-4">
+            <label className="flex items-center">
+              <input
+                type="radio"
+                name="type"
+                value="playlist"
+                checked={type === "playlist"}
+                onChange={(e) => setType(e.target.value)}
+                className="mr-2"
+              />
+              <span className="text-gray-700 dark:text-gray-300">Playlist</span>
+            </label>
             <label className="flex items-center">
               <input
                 type="radio"
@@ -96,19 +108,7 @@ const URLForm = ({ onResult, onError }) => {
                 Single Video
               </span>
             </label>
-            <label className="flex items-center">
-              <input
-                type="radio"
-                name="type"
-                value="playlist"
-                checked={type === "playlist"}
-                onChange={(e) => setType(e.target.value)}
-                className="mr-2"
-              />
-              <span className="text-gray-700 dark:text-gray-300">Playlist</span>
-            </label>
           </div>
-
           <div className="relative">
             <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
               <FaLink className="text-gray-500" />

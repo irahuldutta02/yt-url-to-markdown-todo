@@ -3,23 +3,36 @@ import toast from "react-hot-toast";
 import { FaCheckSquare, FaCopy } from "react-icons/fa";
 
 const ResultDisplay = ({ result, type }) => {
-  const textAreaRef = useRef(null);
-
-  // Generate markdown for a single video
+  const textAreaRef = useRef(null); // Generate markdown for a single video
   const generateVideoMarkdown = (data) => {
-    return `**[${data.title}](${data.url})**\n\n**[${data.channelTitle}](${data.channelUrl})**\n\n- [ ] **[${data.title}](${data.embedUrl}) (${data.duration})**`;
+    return `**01. [${data.title}](${data.embedUrl}) (${data.duration})**`;
   };
 
   // Generate markdown for a playlist
   const generatePlaylistMarkdown = (data) => {
-    let markdown = `**[${data.title}](${data.url})**\n\n**[${data.channelTitle}](${data.channelUrl})**\n\n`;
+    // Get current date and time
+    const now = new Date();
+    const formattedDate = now.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+    const formattedTime = now.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+    const lastUpdated = `${formattedDate} ${formattedTime}`;
+
+    let markdown = `## [${data.title}](${data.url}) - [${data.channelTitle}](${data.channelUrl})\n\n`;
+    markdown += `- **Total Playlist Duration: ${data.totalDuration}**\n`;
+    markdown += `- **Last Updated at : ${lastUpdated}**\n`;
+    markdown += `- **Total Items** - ${data.videos.length}\n`;
 
     data.videos.forEach((video, index) => {
       const paddedIndex = (index + 1).toString().padStart(2, "0");
-      markdown += `- [ ] **${paddedIndex}. [${video.title}](${video.embedUrl}) (${video.duration})**\n`;
+      markdown += `- [ ]  **${paddedIndex}. [${video.title}](${video.embedUrl}) (${video.duration})**\n`;
     });
-
-    markdown += `\n**Total Playlist Duration: ${data.totalDuration}**`;
 
     return markdown;
   };
@@ -83,6 +96,24 @@ const ResultDisplay = ({ result, type }) => {
         className="hidden"
         aria-hidden="true"
       />
+      <div className="mt-4 flex justify-between items-center">
+        <div>
+          {type === "playlist" && (
+            <p className="text-gray-600 dark:text-gray-400 text-sm">
+              <strong>{result?.videos?.length || 0}</strong> videos |
+              <strong> {result?.totalDuration}</strong> total duration
+            </p>
+          )}
+        </div>
+        <a
+          href={result?.url || "#"}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+        >
+          Open on YouTube
+        </a>
+      </div>
     </div>
   );
 };
