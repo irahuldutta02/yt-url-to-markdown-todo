@@ -5,7 +5,25 @@ import { FaCheckSquare, FaCopy } from "react-icons/fa";
 const ResultDisplay = ({ result, type }) => {
   const textAreaRef = useRef(null); // Generate markdown for a single video
   const generateVideoMarkdown = (data) => {
-    return `**01. [${data.title}](${data.embedUrl}) (${data.duration})**`;
+    // Get current date and time
+    const now = new Date();
+    const formattedDate = now.toLocaleDateString("en-GB", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+    const formattedTime = now.toLocaleTimeString("en-US", {
+      hour: "numeric",
+      minute: "2-digit",
+      hour12: true,
+    });
+    const lastUpdated = `${formattedDate} ${formattedTime}`;
+
+    let markdown = `## [${data.title}](${data.url}) - [${data.channelTitle}](${data.channelUrl})\n\n`;
+    markdown += `- **Last Updated at : ${lastUpdated}**\n\n`;
+    markdown += `- [ ]  **01. [${data.title}](${data.embedUrl}) (${data.duration})**`;
+
+    return markdown;
   };
 
   // Generate markdown for a playlist
